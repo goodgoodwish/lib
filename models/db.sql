@@ -1,7 +1,14 @@
 /**
+Goal: tables for LocalLibrary website.
+
+Express web framework (Node.js/JavaScript)
+Express Tutorial Part 3: Using a Database
+
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose
 
 **/
 
+drop table if exists author cascade;
 create table author (
     author_id int,
     first_name text,
