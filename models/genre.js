@@ -1,6 +1,6 @@
 // import Postgres from "../libs/Postgres";
 // import { Project } from "../types/Project.type";
-var Postgres = require('../libs/Postgres')
+var Postgres = require('../libs/Postgres');
 
 async function add(id, title, author_id, summary, isbn, genre, url) {
   const statement = `INSERT INTO projects (id, title, author_id, summary, isbn, genre, url)
@@ -39,7 +39,6 @@ async function getById(id) {
   return result.rows[0];
 }
 
-// export default {
 module.exports = {
   add,
   update,

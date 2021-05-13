@@ -39,7 +39,6 @@ async function getById(id) {
   return result.rows[0];
 }
 
-// export default {
 module.exports = {
   add,
   update,

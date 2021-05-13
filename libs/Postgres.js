@@ -1,4 +1,5 @@
-import { Pool } from "pg";
+// import { Pool } from "pg";
+var Pool  = require('pg').Pool;
 
 const pool = new Pool({ max: 10, connectionString: process.env.DATABASE_URL });
 
@@ -13,7 +14,8 @@ function getClient() {
   return pool.connect();
 }
 
-export default {
+// export default {
+module.exports = {
   query,
   getClient,
   close: pool.end
