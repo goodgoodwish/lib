@@ -2,10 +2,20 @@
 // import { Project } from "../types/Project.type";
 var Postgres = require('../libs/Postgres');
 
-async function add(id, title, author_id, summary, isbn, genre, url) {
-  const statement = `INSERT INTO projects (id, title, author_id, summary, isbn, genre, url)
-   VALUES ($1, $2, $3, $4, $5, $6, $7)`;
-  await Postgres.query(statement, [id, title, author_id, summary, isbn, genre, url]);
+async function add(name, url) {
+  const statement = `INSERT INTO genre (name, url)
+   VALUES ($1, $2)
+   RETURNING *
+   `;
+  const res = await Postgres.query(statement, [name, url]);
+  return res;
+}
+
+async function delAll() {
+  const statement = `delete from genre
+   `;
+  const res = await Postgres.query(statement, []);
+  return res;
 }
 
 async function update(id, book) {
@@ -28,13 +38,13 @@ async function remove(id) {
 }
 
 async function getAll() {
-  const statement = "SELECT id, name, timezone FROM book";
+  const statement = "SELECT name, url FROM genre";
   const result = await Postgres.query(statement, []);
   return result.rows;
 }
 
 async function getById(id) {
-  const statement = "SELECT id, name, timezone FROM book WHERE id = $1";
+  const statement = "SELECT name, url FROM genre WHERE name = $1";
   const result = await Postgres.query(statement, [id]);
   return result.rows[0];
 }
@@ -43,6 +53,7 @@ module.exports = {
   add,
   update,
   remove,
+  delAll,
   getAll,
   getById
 };
