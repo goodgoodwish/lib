@@ -28,7 +28,9 @@ async function remove(id) {
 }
 
 async function getAll() {
-  const statement = "SELECT id, name, timezone FROM book";
+  const statement = `SELECT book_id, title, b.author_id, summary, isbn, genre, b.url, a.name author_name
+    FROM book b, author a
+    where b.author_id = a.author_id`;
   const result = await Postgres.query(statement, []);
   return result.rows;
 }

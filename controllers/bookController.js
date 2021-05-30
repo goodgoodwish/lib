@@ -1,5 +1,7 @@
 var Book = require('../models/book');
 var Genre = require('../models/genre')
+var Author = require('../models/author')
+var BookInstance = require('../models/bookinstance')
 
 var async = require('async')
 
@@ -7,27 +9,48 @@ var async = require('async')
 exports.index = function(req, res) {
 
     async.parallel({
+        author_count: async () => {
+            const cnt = await Author.authorCount();
+            console.log(cnt);
+            return cnt
+        },
         book_count: async () => {
             const cnt = await Book.bookCount();
+            console.log(cnt);
+            return cnt
+        },
+        book_instance_count: async () => {
+            const cnt = await BookInstance.bookInstanceCount();
             console.log(cnt);
             return cnt
         },
         genre_count: async () => {
             try {
                 const cnt = await Genre.genreCount();
+                console.log(cnt);
                 return cnt
             } catch(err) {
                 console.error(err);
             }
-        }
+        },
     }, function(err, results) {
+        if (err) {
+            console.error(err);
+        }
+        console.log("results: ", results);
         res.render('index', { title: 'Local Library Home', error: err, data: results})
     })
 }
 
 // Display list of all books.
-exports.book_list = function(req, res) {
-    res.send('NOT IMPLEMENTED: Book list');
+exports.book_list = async function(req, res) {
+    try {
+        const list_books = await Book.getAll()
+        // console.log(list_books)
+        res.render('book_list', {title: 'Book List', book_list: list_books})
+    } catch (e) {
+        console.error(e);
+    }
 };
 
 // Display detail page for a specific book.
