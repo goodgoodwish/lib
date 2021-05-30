@@ -1,7 +1,28 @@
 var Book = require('../models/book');
+var Genre = require('../models/genre')
+
+var async = require('async')
+
 
 exports.index = function(req, res) {
-    res.send('Site home page');
+
+    async.parallel({
+        book_count: async () => {
+            const cnt = await Book.bookCount();
+            console.log(cnt);
+            return cnt
+        },
+        genre_count: async () => {
+            try {
+                const cnt = await Genre.genreCount();
+                return cnt
+            } catch(err) {
+                console.error(err);
+            }
+        }
+    }, function(err, results) {
+        res.render('index', { title: 'Local Library Home', error: err, data: results})
+    })
 }
 
 // Display list of all books.

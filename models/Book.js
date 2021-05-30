@@ -39,11 +39,18 @@ async function getById(id) {
   return result.rows[0];
 }
 
+async function bookCount() {
+  const sql = "SELECT COUNT(*) book_count FROM book";
+  const result = await Postgres.query(sql);
+  return result.rows[0].book_count;
+}
+
 // export default {
 module.exports = {
   add,
   update,
   remove,
   getAll,
-  getById
+  getById,
+  bookCount,
 };

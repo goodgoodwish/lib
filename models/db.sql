@@ -20,11 +20,14 @@ create table author (
     url text
 );
 
+drop table if exists genre cascade;
 create table genre (
-    name text primary key,
-    url text
+    id serial,
+    name text,
+    url text GENERATED ALWAYS AS ('/catalog/genre/'||id::text) stored
 );
 
+drop table if exists book cascade;
 create table book (
     book_id int,
     title text,
@@ -32,7 +35,7 @@ create table book (
     summary text,
     isbn text,
     genre text,
-    url text
+    url text GENERATED ALWAYS AS ('/catalog/book/'||book_id::text) stored
 );
 
 create table book_instance (

@@ -3,38 +3,35 @@
 var Postgres = require('../libs/Postgres');
 
 async function add(name, url) {
-  const statement = `INSERT INTO genre (name, url)
-   VALUES ($1, $2)
+  const statement = `INSERT INTO genre (name)
+   VALUES ($1)
    RETURNING *
    `;
-  const res = await Postgres.query(statement, [name, url]);
-  return res;
+  const res = await Postgres.query(statement, [name]);
+  return res.rows[0];
 }
 
 async function delAll() {
-  const statement = `delete from genre
-   `;
+  const statement = `delete from genre`;
   const res = await Postgres.query(statement, []);
   return res;
 }
 
-async function update(id, book) {
+async function update(name) {
   const statement = `
     UPDATE
-      projects 
+      genre 
     SET
-      name = $2,
-      timezone = $3,
-      updated_at = NOW()
+      name = $1
     WHERE
-      id = $1
+      name = $1
   `;
 
-  await Postgres.query(statement, [id, book.title, book.author_id]);
+  await Postgres.query(statement, [name,]);
 }
 
 async function remove(id) {
-  await Postgres.query("DELETE FROM book WHERE id = $1", [id]);
+  await Postgres.query("DELETE FROM genre WHERE name = $1", [id]);
 }
 
 async function getAll() {
@@ -49,11 +46,18 @@ async function getById(id) {
   return result.rows[0];
 }
 
+async function genreCount() {
+  const sql = "select count(*) cnt from genre";
+  const ans = await Postgres.query(sql)
+  return ans.rows[0].cnt
+}
+
 module.exports = {
   add,
   update,
   remove,
   delAll,
   getAll,
-  getById
+  getById,
+  genreCount,
 };
