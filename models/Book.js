@@ -41,6 +41,14 @@ async function getById(id) {
   return result.rows[0];
 }
 
+async function getByGenre(genre) {
+  const statement = `SELECT book_id, title, author_id, summary, isbn, genre, url
+  FROM book 
+  WHERE genre in (select name from genre where id = $1)`;
+  const result = await Postgres.query(statement, [genre]);
+  return result.rows;
+}
+
 async function bookCount() {
   const sql = "SELECT COUNT(*) book_count FROM book";
   const result = await Postgres.query(sql);
@@ -54,5 +62,6 @@ module.exports = {
   remove,
   getAll,
   getById,
+  getByGenre,
   bookCount,
 };

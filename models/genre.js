@@ -41,7 +41,7 @@ async function getAll() {
 }
 
 async function getById(id) {
-  const statement = "SELECT name, url FROM genre WHERE name = $1";
+  const statement = "SELECT name, url FROM genre WHERE id = $1";
   const result = await Postgres.query(statement, [id]);
   return result.rows[0];
 }
